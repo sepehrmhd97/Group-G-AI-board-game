@@ -1,5 +1,5 @@
-import heuristic_state_functions as h
-import global_config as g
+import decisionCoeff as dc
+import globalVariables as globalVar
 from copy import deepcopy
 
 
@@ -15,9 +15,9 @@ class State(object):
 
 	def isTerminalState(self):
 		loserIsBlack, loserIsWhite = False, False
-		if h.allPlayerPiecesClosed(self, 'B') or h.getNumberOfPlayerPieces(self, 'B') < 3:
+		if dc.allPlayerPiecesClosed(self, 'B') or dc.getNumberOfPlayerPieces(self, 'B') < 3:
 			loserIsBlack = True
-		if h.allPlayerPiecesClosed(self, 'W') or h.getNumberOfPlayerPieces(self, 'W') < 3:
+		if dc.allPlayerPiecesClosed(self, 'W') or dc.getNumberOfPlayerPieces(self, 'W') < 3:
 			loserIsWhite = True
 		if (not loserIsBlack) and (not loserIsWhite):
 			return False
@@ -25,12 +25,12 @@ class State(object):
 		return True
 
 	def getTerminal(self):
-		if self.isLoserBlack: return -g.MAXIMUM
-		else: return g.MAXIMUM
+		if self.isLoserBlack: return -globalVar.MAXIMUM
+		else: return globalVar.MAXIMUM
 
 	def nextStatesInit(self):
 		for i in range(24):
-			if self.board[i] in g.EMPTYCELL.values():
+			if self.board[i] in globalVar.emptyField.values():
 				boardCopy = deepcopy(self.board)
 				if self.blackToMove:
 					boardCopy[i] = 'B'
@@ -43,13 +43,13 @@ class State(object):
 			player = 'B'
 		else:
 			player = 'W'
-		for key, value in g.ADJDICT.items():
+		for key, value in globalVar.validAdjacent.items():
 			if self.board[key] == player:
 				for index in value:
-					if self.board[index] in g.EMPTYCELL.values():
+					if self.board[index] in globalVar.emptyField.values():
 						boardCopy = deepcopy(self.board)
 						boardCopy[index] = player
-						boardCopy[key] = g.EMPTYCELL[key]
+						boardCopy[key] = globalVar.emptyField[key]
 						self.nextStates.append(State(boardCopy, not self.blackToMove, [key, index], self))
 
 	def nextStatesFly(self):
@@ -57,29 +57,29 @@ class State(object):
 			player = 'B'
 		else:
 			player = 'W'
-		player_pieces = h.getAllPositionsOfPlayer(self, player)
-		empty_pos = h.getAllEmptyPositionsOnBoard(self)
+		player_pieces = dc.getAllPositionsOfPlayer(self, player)
+		empty_pos = dc.getAllEmptyPositionsOnBoard(self)
 		for piece in player_pieces:
 			for cell in empty_pos:
 				boardCopy = deepcopy(self.board)
 				boardCopy[cell] = player
-				boardCopy[piece] = g.EMPTYCELL[piece]
+				boardCopy[piece] = globalVar.emptyField[piece]
 				self.nextStates.append(State(boardCopy, not self.blackToMove, [piece, cell], self))
 
 	def nextStatesMill(self):
 		br = 0
 		for i in range(24):
-			if not h.pieceInMill(self, i):
+			if not dc.pieceInMill(self, i):
 				if (self.blackToMove and self.board[i] == 'W') or ((not self.blackToMove) and self.board[i] == 'B'):
 					boardCopy = deepcopy(self.board)
-					boardCopy[i] = g.EMPTYCELL[i]
+					boardCopy[i] = globalVar.emptyField[i]
 					self.nextStates.append(State(boardCopy, not self.blackToMove, [i], self))
 					br += 1
 		if br == 0:
 			for i in range(24):
 				if (self.blackToMove and self.board[i] == 'W') or ((not self.blackToMove) and self.board[i] == 'B'):
 					boardCopy = deepcopy(self.board)
-					boardCopy[i] = g.EMPTYCELL[i]
+					boardCopy[i] = globalVar.emptyField[i]
 					self.nextStates.append(State(boardCopy, not self.blackToMove, [i], self))
 
 	def makeChildren(self, phase):
