@@ -1,7 +1,7 @@
 from copy import deepcopy
 import decisionCoeff as dc
 import globalVariables as globalVar
-import pretty_print as pp
+# import pretty_print as pp
 from gameState import State
 import game
 import os
@@ -12,7 +12,7 @@ from colorama import Fore, Back, Style
 def human_play_mill(gameState):
 	old_state_board = deepcopy(gameState.board)
 	print()
-	pp.print_table(gameState.board)
+	# pp.print_table(gameState.board)
 
 	br = 0
 	possibilities = []
@@ -90,7 +90,9 @@ def human_play_move(gameState):
 
 	while True:
 		print("PHASE 2")
-		first = input("Type the peice you wish to move from >> ")
+		print(Back.CYAN + Fore.BLACK + "Your pieces" , possibilities1)
+
+		first = input("Type the pieces you wish to move from >> ")
 		try:
 			first = int(first)
 		except:
@@ -144,6 +146,8 @@ def human_play_fly(gameState):
 
 	while True:
 		print("PHASE 3")
+		print(Back.CYAN + Fore.BLACK + "Your pieces" , possibilities1)
+
 		first = input("Phase 3(FLY) : Type the field from which you want to move the piece ")
 		try:
 			first = int(first)

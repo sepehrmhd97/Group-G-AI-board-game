@@ -1,5 +1,5 @@
 import globalVariables as globalVar
-import pretty_print as pp
+# import pretty_print as pp
 from gameState import State
 import decisionCoeff as dc
 import sys
@@ -158,17 +158,17 @@ def aiPlay(gameState, mill):
 	old_state_table = deepcopy(gameState.board)
 	if mill:
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		pp.print_table(gameState.board)
-		print(Back.RED+Back.YELLOW+"The AI just made the MILL and dc. removed your piece from {}. field.".format(move[0]))
+		# pp.print_table(gameState.board)
+		print(Back.RED+"The AI just made the MILL and dc. removed your piece from {}. field.".format(move[0]))
 		globalVar.whiteRemoved += 1
 	elif globalVar.PHASE == 'INIT':
 		globalVar.TABLE[move[0]] = 'B'
-		pp.print_table(gameState.board)
+		# pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has placed piece at {}. field.".format(move[0]))
 	elif globalVar.PHASE == 'MOVE' or globalVar.PHASE == 'FLY':
 		globalVar.TABLE[move[1]] = 'B'
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		pp.print_table(gameState.board)
+		# pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has moved piece from {}. field to {}. field.".format(move[0], move[1]))
 	gameState.board = old_state_table
 	new_state = State(globalVar.TABLE, False, move, gameState)
@@ -219,6 +219,8 @@ if __name__ == '__main__':
 			inp = "y"
 		else:
 			inp = "n"
+		inp = "no"
+		blackStarts = True
 		if inp == 'yes' or inp == 'y':
 			gameState = State(globalVar.TABLE, False,[])
 			break
