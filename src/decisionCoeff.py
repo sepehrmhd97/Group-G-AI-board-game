@@ -1,7 +1,7 @@
 import globalVariables as globalVar
 
 
-def getNumberOf2PeacesConfig(gameState, player):
+def numberOf2Config(gameState, player):
 	number = 0
 	for trio in globalVar.validMills:
 		if gameState.board[trio[0]] == gameState.board[trio[1]] == player and gameState.board[trio[2]] in globalVar.emptyField.values():
@@ -13,7 +13,7 @@ def getNumberOf2PeacesConfig(gameState, player):
 	return number
 
 
-def getNumberOf3PeaceConfig(gameState, player):
+def numberOf3Config(gameState, player):
 	number = 0
 	for var in globalVar.Trees:
 		if gameState.board[var[0]] == gameState.board[var[1]] == gameState.board[var[2]] == player and gameState.board[
@@ -22,7 +22,7 @@ def getNumberOf3PeaceConfig(gameState, player):
 	return number
 
 
-def getNumberOfPlayerDoubleMills(gameState, player):
+def numberOfPlayerDoubleMills(gameState, player):
 	number = 0
 	for var in globalVar.validDoubleMills:
 		if gameState.board[var[0]] == gameState.board[var[1]] == gameState.board[var[2]] == gameState.board[var[3]] == gameState.board[
@@ -31,7 +31,7 @@ def getNumberOfPlayerDoubleMills(gameState, player):
 	return number
 
 
-def getNumberOfPlayerMills(gameState, player):
+def numberOfPlayerMills(gameState, player):
 	numberOfMills = 0
 	for trio in globalVar.validMills:
 		if gameState.board[trio[0]] == gameState.board[trio[1]] == gameState.board[trio[2]] == player:
@@ -39,7 +39,7 @@ def getNumberOfPlayerMills(gameState, player):
 	return numberOfMills
 
 
-def getNumberOfPlayerPieces(gameState, player):
+def numberOfPlayerPieces(gameState, player):
 	number = 0
 	for position in gameState.board:
 		if position == player:
@@ -47,7 +47,7 @@ def getNumberOfPlayerPieces(gameState, player):
 	return number
 
 
-def getNumberOfPlayerClosedPeaces(gameState, player):
+def numberOfPlayerClosedPeaces(gameState, player):
 	number = 0
 	for key, value in globalVar.validAdjacent.items():
 		temp = 0
@@ -70,45 +70,45 @@ def allPlayerPiecesClosed(gameState, player):
 
 
 def differenceIn3PeacesConfig(gameState):
-	black = getNumberOf3PeaceConfig(gameState, 'B')
-	white = getNumberOf3PeaceConfig(gameState, 'W')
+	black = numberOf3Config(gameState, globalVar.variable1)
+	white = numberOf3Config(gameState, globalVar.variable2)
 	return black - white
 
 
 def differenceInDoubleMorrises(gameState):
-	black = getNumberOfPlayerDoubleMills(gameState, 'B')
-	white = getNumberOfPlayerDoubleMills(gameState, 'W')
+	black = numberOfPlayerDoubleMills(gameState, globalVar.variable1)
+	white = numberOfPlayerDoubleMills(gameState, globalVar.variable2)
 	return black - white
 
 
 def differenceIn2PeacesConfig(gameState):
-	black = getNumberOf2PeacesConfig(gameState, 'B')
-	white = getNumberOf2PeacesConfig(gameState, 'W')
+	black = numberOf2Config(gameState, globalVar.variable1)
+	white = numberOf2Config(gameState, globalVar.variable2)
 	return black - white
 
 
 def differenceInClosedPeaces(gameState):
-	black = getNumberOfPlayerClosedPeaces(gameState, 'B')
-	white = getNumberOfPlayerClosedPeaces(gameState, 'W')
+	black = numberOfPlayerClosedPeaces(gameState, globalVar.variable1)
+	white = numberOfPlayerClosedPeaces(gameState, globalVar.variable2)
 	return black - white
 
 
 def differceInNumberOfMills(gameState):
-	black = getNumberOfPlayerMills(gameState, 'B')
-	white = getNumberOfPlayerMills(gameState, 'W')
+	black = numberOfPlayerMills(gameState, globalVar.variable1)
+	white = numberOfPlayerMills(gameState, globalVar.variable2)
 	return black - white
 
 
 def differceInPieces(gameState):
-	black = getNumberOfPlayerPieces(gameState, 'B')
-	white = getNumberOfPlayerPieces(gameState, 'W')
+	black = numberOfPlayerPieces(gameState, globalVar.variable1)
+	white = numberOfPlayerPieces(gameState, globalVar.variable2)
 	return black - white
 
 
 def winningConfiguration(gameState):
-	if allPlayerPiecesClosed(gameState, 'W') or getNumberOfPlayerPieces(gameState, 'W') < 3:
+	if allPlayerPiecesClosed(gameState, globalVar.variable2) or numberOfPlayerPieces(gameState, globalVar.variable2) < 3:
 		return 1
-	if allPlayerPiecesClosed(gameState, 'B') or getNumberOfPlayerPieces(gameState, 'B') < 3:
+	if allPlayerPiecesClosed(gameState, globalVar.variable1) or numberOfPlayerPieces(gameState, globalVar.variable1) < 3:
 		return -1
 	return 0
 
@@ -134,10 +134,10 @@ def closedMorris(gameState):
 	if gameState.parent is None:
 		return 0
 	if gameState.blackToMove:
-		if millHasBeenMadeInLastTurn(gameState, 'W'):
+		if millHasBeenMadeInLastTurn(gameState, globalVar.variable2):
 			return -1
 	else:
-		if millHasBeenMadeInLastTurn(gameState, 'B'):
+		if millHasBeenMadeInLastTurn(gameState, globalVar.variable1):
 			return 1
 	return 0
 

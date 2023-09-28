@@ -1,5 +1,5 @@
 import globalVariables as globalVar
-# import pretty_print as pp
+import pretty_print as pp
 from gameState import State
 import decisionCoeff as dc
 import sys
@@ -19,12 +19,12 @@ def play(gameState):
 	millIsMade = False
 	if gameState.parent is not None:
 		if gameState.blackToMove:
-			if dc.millHasBeenMadeInLastTurn(gameState, 'W'):
+			if dc.millHasBeenMadeInLastTurn(gameState, globalVar.variable2):
 				millIsMade = True
 				gameState.blackToMove = False
 				userGameMoves.userGameMoves(gameState, True)
 		else:
-			if dc.millHasBeenMadeInLastTurn(gameState, 'B'):
+			if dc.millHasBeenMadeInLastTurn(gameState, globalVar.variable1):
 				millIsMade = True
 				gameState.blackToMove = True
 				aiPlay(gameState, True)
@@ -47,10 +47,10 @@ def checkGameOver(gameState):
 
 
 	if globalVar.PHASE != 'INIT':
-		if dc.allPlayerPiecesClosed(gameState,'B') or dc.getNumberOfPlayerPieces(gameState,'B') < 3:
+		if dc.allPlayerPiecesClosed(gameState,globalVar.variable1) or dc.numberOfPlayerPieces(gameState,globalVar.variable1) < 3:
 			print(Back.GREEN + '=========================CONGRATULATIONS, YOU WIN!=========================')
 			sys.exit()
-		if dc.allPlayerPiecesClosed(gameState, 'W') or dc.getNumberOfPlayerPieces(gameState, 'W') < 3:
+		if dc.allPlayerPiecesClosed(gameState, globalVar.variable2) or dc.numberOfPlayerPieces(gameState, globalVar.variable2) < 3:
 			print(Back.RED+'===========================YOU LOSE!==========================')
 			sys.exit()
 
@@ -87,8 +87,8 @@ def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
 			phase = 'FLY'
 
 	if phase == 'MOVE':
-		if (gameState.blackToMove and dc.getNumberOfPlayerPieces(gameState, 'B') == 3) or \
-				((not gameState.blackToMove) and dc.getNumberOfPlayerPieces(gameState, 'W')) == 3:
+		if (gameState.blackToMove and dc.numberOfPlayerPieces(gameState, globalVar.variable1) == 3) or \
+				((not gameState.blackToMove) and dc.numberOfPlayerPieces(gameState, globalVar.variable2)) == 3:
 			phase = 'FLY'
 
 	if gameState.isTerminalState() and phase != 'INIT':
@@ -98,7 +98,7 @@ def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
 
 	if gameState.parent is not None:
 		if gameState.blackToMove:
-			if dc.millHasBeenMadeInLastTurn(gameState, 'W'):
+			if dc.millHasBeenMadeInLastTurn(gameState, globalVar.variable2):
 				gameState.blackToMove = False
 				if phase == 'FLY':
 					#gameState.blackToMove = False
@@ -106,7 +106,7 @@ def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
 				else:
 					return minValue(gameState, alpha, beta, depth, 'MILL')
 		else:
-			if dc.millHasBeenMadeInLastTurn(gameState, 'B'):
+			if dc.millHasBeenMadeInLastTurn(gameState, globalVar.variable1):
 				gameState.blackToMove = True
 				if phase == 'FLY':
 					#gameState.blackToMove = True
@@ -124,12 +124,12 @@ def aiNextMove(gameState, mill):
 	globalVar.startTime = time()
 	depth = 4
 
-	if dc.getNumberOfPlayerPieces(gameState, 'B') + globalVar.blackRemoved == 9:
+	if dc.numberOfPlayerPieces(gameState, globalVar.variable1) + globalVar.blackRemoved == 9:
 		globalVar.PHASE = 'MOVE'
 	else:
 		globalVar.PHASE = 'INIT'
 
-	if dc.getNumberOfPlayerPieces(gameState, 'B') == 3 and globalVar.PHASE != 'INIT':
+	if dc.numberOfPlayerPieces(gameState, globalVar.variable1) == 3 and globalVar.PHASE != 'INIT':
 		globalVar.PHASE = 'FLY'
 		depth = 2
 
@@ -158,17 +158,17 @@ def aiPlay(gameState, mill):
 	old_state_table = deepcopy(gameState.board)
 	if mill:
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		# pp.print_table(gameState.board)
+		pp.print_table(gameState.board)
 		print(Back.RED+"The AI just made the MILL and dc. removed your piece from {}. field.".format(move[0]))
 		globalVar.whiteRemoved += 1
 	elif globalVar.PHASE == 'INIT':
-		globalVar.TABLE[move[0]] = 'B'
-		# pp.print_table(gameState.board)
+		globalVar.TABLE[move[0]] = globalVar.variable1
+		pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has placed piece at {}. field.".format(move[0]))
 	elif globalVar.PHASE == 'MOVE' or globalVar.PHASE == 'FLY':
-		globalVar.TABLE[move[1]] = 'B'
+		globalVar.TABLE[move[1]] = globalVar.variable1
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		# pp.print_table(gameState.board)
+		pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has moved piece from {}. field to {}. field.".format(move[0], move[1]))
 	gameState.board = old_state_table
 	new_state = State(globalVar.TABLE, False, move, gameState)
@@ -214,13 +214,25 @@ if __name__ == '__main__':
 	while True:
 		# random 
 		x = random.randint(1,2)
+		# y = random.randint(1,2)
 
-		if x == 1:
+		# if y ==1:
+		# 	globalVar.variable1 = 'B'
+		# 	globalVar.variable2 = 'W'
+		# else:
+		# 	globalVar.variable1 = 'W'
+		# 	globalVar.variable2 = 'B'
+
+		x=1
+		if x == 2:
 			inp = "y"
+			globalVar.variable1 = 'W'
+			globalVar.variable2 = 'B'
 		else:
 			inp = "n"
-		inp = "no"
-		blackStarts = True
+			globalVar.variable1 = 'B'
+			globalVar.variable2 = 'W'
+		# inp = "n"
 		if inp == 'yes' or inp == 'y':
 			gameState = State(globalVar.TABLE, False,[])
 			break

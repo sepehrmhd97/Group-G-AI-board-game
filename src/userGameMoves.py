@@ -1,7 +1,7 @@
 from copy import deepcopy
 import decisionCoeff as dc
 import globalVariables as globalVar
-# import pretty_print as pp
+import pretty_print as pp
 from gameState import State
 import game
 import os
@@ -12,18 +12,18 @@ from colorama import Fore, Back, Style
 def human_play_mill(gameState):
 	old_state_board = deepcopy(gameState.board)
 	print()
-	# pp.print_table(gameState.board)
+	pp.print_table(gameState.board)
 
 	br = 0
 	possibilities = []
 	for i in range(24):
 		if not dc.pieceInMill(gameState, i):
-			if gameState.board[i] == 'B':
+			if gameState.board[i] == globalVar.variable1:
 				possibilities.append(i)
 				br += 1
 	if br == 0:
 		for i in range(24):
-			if gameState.board[i] == 'B':
+			if gameState.board[i] == globalVar.variable1:
 				possibilities.append(i)
 
 	while True:
@@ -75,7 +75,7 @@ def human_play_init(gameState):
 		else:
 			break
 
-	globalVar.TABLE[place] = 'W'
+	globalVar.TABLE[place] = globalVar.variable2
 	gameState.board = old_state_board
 	new_state = State(globalVar.TABLE, True, [place], gameState)
 	game.play(new_state)
@@ -85,7 +85,7 @@ def human_play_move(gameState):
 	old_state_board = deepcopy(gameState.board)
 	possibilities1 = []
 	for i in range(24):
-		if gameState.board[i] == 'W':
+		if gameState.board[i] == globalVar.variable2:
 			possibilities1.append(i)
 
 	while True:
@@ -127,7 +127,7 @@ def human_play_move(gameState):
 		else:
 			break
 
-	globalVar.TABLE[second] = 'W'
+	globalVar.TABLE[second] = globalVar.variable2
 	globalVar.TABLE[first] = globalVar.emptyField[first]
 	gameState.board = old_state_board
 	new_state = State(globalVar.TABLE, True, [first, second], gameState)
@@ -139,7 +139,7 @@ def human_play_fly(gameState):
 	possibilities1 = []
 	possibilities_free = []
 	for i in range(24):
-		if gameState.board[i] == 'W':
+		if gameState.board[i] == globalVar.variable2:
 			possibilities1.append(i)
 		if gameState.board[i] in globalVar.emptyField.values():
 			possibilities_free.append(i)
@@ -171,7 +171,7 @@ def human_play_fly(gameState):
 		else:
 			break
 
-	globalVar.TABLE[second] = 'W'
+	globalVar.TABLE[second] = globalVar.variable2
 	globalVar.TABLE[first] = globalVar.emptyField[first]
 	gameState.board = old_state_board
 	new_state = State(globalVar.TABLE, True, [first, second], gameState)
@@ -179,12 +179,12 @@ def human_play_fly(gameState):
 
 
 def userGameMoves(gameState, mill):
-	if dc.getNumberOfPlayerPieces(gameState, 'W') + globalVar.whiteRemoved == 9:
+	if dc.numberOfPlayerPieces(gameState, globalVar.variable2) + globalVar.whiteRemoved == 9:
 		globalVar.PHASE = 'MOVE'
 	else:
 		globalVar.PHASE = 'INIT'
 
-	if dc.getNumberOfPlayerPieces(gameState, 'W') == 3 and globalVar.PHASE != 'INIT':
+	if dc.numberOfPlayerPieces(gameState, globalVar.variable2) == 3 and globalVar.PHASE != 'INIT':
 		globalVar.PHASE = 'FLY'
 
 	if mill:

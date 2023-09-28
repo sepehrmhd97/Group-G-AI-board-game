@@ -15,9 +15,9 @@ class State(object):
 
 	def isTerminalState(self):
 		loserIsBlack, loserIsWhite = False, False
-		if dc.allPlayerPiecesClosed(self, 'B') or dc.getNumberOfPlayerPieces(self, 'B') < 3:
+		if dc.allPlayerPiecesClosed(self, globalVar.variable1) or dc.numberOfPlayerPieces(self, globalVar.variable1) < 3:
 			loserIsBlack = True
-		if dc.allPlayerPiecesClosed(self, 'W') or dc.getNumberOfPlayerPieces(self, 'W') < 3:
+		if dc.allPlayerPiecesClosed(self, globalVar.variable2) or dc.numberOfPlayerPieces(self, globalVar.variable2) < 3:
 			loserIsWhite = True
 		if (not loserIsBlack) and (not loserIsWhite):
 			return False
@@ -33,16 +33,16 @@ class State(object):
 			if self.board[i] in globalVar.emptyField.values():
 				boardCopy = deepcopy(self.board)
 				if self.blackToMove:
-					boardCopy[i] = 'B'
+					boardCopy[i] = globalVar.variable1
 				else:
-					boardCopy[i] = 'W'
+					boardCopy[i] = globalVar.variable2
 				self.nextStates.append(State(boardCopy, not self.blackToMove, [i], self))
 
 	def nextStatesMove(self):
 		if self.blackToMove:
-			player = 'B'
+			player = globalVar.variable1
 		else:
-			player = 'W'
+			player = globalVar.variable2
 		for key, value in globalVar.validAdjacent.items():
 			if self.board[key] == player:
 				for index in value:
@@ -54,9 +54,9 @@ class State(object):
 
 	def nextStatesFly(self):
 		if self.blackToMove:
-			player = 'B'
+			player = globalVar.variable1
 		else:
-			player = 'W'
+			player = globalVar.variable2
 		player_pieces = dc.getAllPositionsOfPlayer(self, player)
 		empty_pos = dc.getAllEmptyPositionsOnBoard(self)
 		for piece in player_pieces:
@@ -70,14 +70,14 @@ class State(object):
 		br = 0
 		for i in range(24):
 			if not dc.pieceInMill(self, i):
-				if (self.blackToMove and self.board[i] == 'W') or ((not self.blackToMove) and self.board[i] == 'B'):
+				if (self.blackToMove and self.board[i] == globalVar.variable2) or ((not self.blackToMove) and self.board[i] == globalVar.variable1):
 					boardCopy = deepcopy(self.board)
 					boardCopy[i] = globalVar.emptyField[i]
 					self.nextStates.append(State(boardCopy, not self.blackToMove, [i], self))
 					br += 1
 		if br == 0:
 			for i in range(24):
-				if (self.blackToMove and self.board[i] == 'W') or ((not self.blackToMove) and self.board[i] == 'B'):
+				if (self.blackToMove and self.board[i] == globalVar.variable2) or ((not self.blackToMove) and self.board[i] == globalVar.variable1):
 					boardCopy = deepcopy(self.board)
 					boardCopy[i] = globalVar.emptyField[i]
 					self.nextStates.append(State(boardCopy, not self.blackToMove, [i], self))
