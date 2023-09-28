@@ -11,6 +11,10 @@ from copy import deepcopy
 
 
 def play(gameState):
+	"""Play the game with the given game state.
+
+    :param gameState: The current game state.
+    """
 	checkGameOver(gameState)
 	print('Moves remaining',300 - globalVar.moveCounter)
 	globalVar.moveCounter+=1
@@ -36,6 +40,10 @@ def play(gameState):
 
 
 def checkGameOver(gameState):
+	"""Check if the game is over and handle game termination.
+
+    :param gameState: The current game state.
+    """
 
 	if(globalVar.moveCounter >= 300):
 		print("DRAW , number of moves has exceeded 300")
@@ -56,9 +64,17 @@ def checkGameOver(gameState):
 
 
 
-# minMax algorithm
-# min value
 def minValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Calculate the minimum value using the Minimax algorithm with alpha-beta pruning.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The minimum value.
+    """
 	val = globalVar.MAXIMUM
 	gameState.makeChildren(phase)
 	for successor in gameState.nextStates:
@@ -67,9 +83,17 @@ def minValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
 		beta = min(beta, val)
 	return val
 
-# minMax algorithm
-# max value
 def maxValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Calculate the maximum value using the Minimax algorithm with alpha-beta pruning.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The maximum value.
+    """
 	val = -globalVar.MAXIMUM
 	gameState.makeChildren(phase)
 	for successor in gameState.nextStates:
@@ -78,8 +102,17 @@ def maxValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
 		alpha = max(alpha, val)
 	return val
 
-# alphaBeta Pruning
 def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Perform alpha-beta pruning to evaluate the game state.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The heuristic evaluation score for the game state.
+    """
 	if phase == 'MILL':
 		if flyPrevious is False:
 			phase = globalVar.PHASECOPY
@@ -121,6 +154,12 @@ def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
 
 
 def aiNextMove(gameState, mill):
+	"""Determine the AI's next move.
+
+    :param gameState: The current game state.
+    :param mill: Indicates if the AI is making a mill.
+    :return: The best move for the AI.
+    """
 	globalVar.startTime = time()
 	depth = 4
 
@@ -154,6 +193,11 @@ def aiNextMove(gameState, mill):
 
 
 def aiPlay(gameState, mill):
+	"""Perform the AI's next move and update the game state.
+
+    :param gameState: The current game state.
+    :param mill: Indicates if the AI is making a mill.
+    """
 	move = aiNextMove(gameState, mill)
 	old_state_table = deepcopy(gameState.board)
 	if mill:
