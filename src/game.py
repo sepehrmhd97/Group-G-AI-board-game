@@ -223,7 +223,7 @@ if __name__ == '__main__':
 		# 	globalVar.variable1 = 'W'
 		# 	globalVar.variable2 = 'B'
 
-		x=1
+		# x=1
 		if x == 2:
 			inp = "y"
 			globalVar.variable1 = 'W'
