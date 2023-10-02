@@ -208,7 +208,7 @@ def aiPlay(gameState, mill):
 	elif globalVar.PHASE == 'INIT':
 		globalVar.TABLE[move[0]] = globalVar.variable1
 		# pp.print_table(gameState.board)
-		print(Back.YELLOW+"The AI has placed piece at {}. field.".format(move[0]))
+		print(Back.YELLOW+Fore.BLACK+"The AI has placed piece at {}. field.".format(move[0])+Fore.WHITE+Back.BLACK)
 	elif globalVar.PHASE == 'MOVE' or globalVar.PHASE == 'FLY':
 		globalVar.TABLE[move[1]] = globalVar.variable1
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
@@ -267,10 +267,14 @@ if __name__ == '__main__':
 			inp = "y"
 			globalVar.variable1 = 'W'
 			globalVar.variable2 = 'B'
+			print("You are starting , you are playing as black")
 		else:
 			inp = "n"
 			globalVar.variable1 = 'B'
 			globalVar.variable2 = 'W'
+			print("AI is starting and is playing as black")
+			print("You are playing as white")
+
 		# inp = "n"
 		if inp == 'yes' or inp == 'y':
 			gameState = State(globalVar.TABLE, False,[])

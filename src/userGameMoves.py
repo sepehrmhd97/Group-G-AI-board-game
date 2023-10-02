@@ -35,6 +35,7 @@ def human_play_mill(gameState):
 				possibilities.append(i)
 
 	while True:
+		print("Piece you can remove field",possibilities)
 		place = input(Back.GREEN + "Mill created , type opponent piece you wish to remove from >> ")
 		try:
 			place = int(place)
