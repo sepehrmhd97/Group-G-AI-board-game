@@ -1,5 +1,5 @@
 import globalVariables as globalVar
-import pretty_print as pp
+
 from gameState import State
 import decisionCoeff as dc
 import sys
@@ -11,6 +11,10 @@ from copy import deepcopy
 
 
 def play(gameState):
+	"""Play the game with the given game state.
+
+    :param gameState: The current game state.
+    """
 	checkGameOver(gameState)
 	print('Moves remaining',300 - globalVar.moveCounter)
 	globalVar.moveCounter+=1
@@ -36,6 +40,10 @@ def play(gameState):
 
 
 def checkGameOver(gameState):
+	"""Check if the game is over and handle game termination.
+
+    :param gameState: The current game state.
+    """
 
 	if(globalVar.moveCounter >= 300):
 		print("DRAW , number of moves has exceeded 300")
@@ -56,9 +64,17 @@ def checkGameOver(gameState):
 
 
 
-# minMax algorithm
-# min value
 def minValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Calculate the minimum value using the Minimax algorithm with alpha-beta pruning.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The minimum value.
+    """
 	val = globalVar.MAXIMUM
 	gameState.makeChildren(phase)
 	for successor in gameState.nextStates:
@@ -67,9 +83,17 @@ def minValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
 		beta = min(beta, val)
 	return val
 
-# minMax algorithm
-# max value
 def maxValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Calculate the maximum value using the Minimax algorithm with alpha-beta pruning.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The maximum value.
+    """
 	val = -globalVar.MAXIMUM
 	gameState.makeChildren(phase)
 	for successor in gameState.nextStates:
@@ -78,8 +102,17 @@ def maxValue(gameState, alpha, beta, depth, phase, flyPrevious=False):
 		alpha = max(alpha, val)
 	return val
 
-# alphaBeta Pruning
 def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
+	"""Perform alpha-beta pruning to evaluate the game state.
+
+    :param gameState: The current game state.
+    :param alpha: Alpha value for pruning.
+    :param beta: Beta value for pruning.
+    :param depth: Current depth in the search tree.
+    :param phase: The phase of the game ('INIT', 'MOVE', or 'FLY').
+    :param flyPrevious: Indicates if the previous phase was 'FLY'.
+    :return: The heuristic evaluation score for the game state.
+    """
 	if phase == 'MILL':
 		if flyPrevious is False:
 			phase = globalVar.PHASECOPY
@@ -121,6 +154,12 @@ def alphaBeta(gameState, alpha, beta, depth, phase, flyPrevious=False):
 
 
 def aiNextMove(gameState, mill):
+	"""Determine the AI's next move.
+
+    :param gameState: The current game state.
+    :param mill: Indicates if the AI is making a mill.
+    :return: The best move for the AI.
+    """
 	globalVar.startTime = time()
 	depth = 4
 
@@ -154,21 +193,26 @@ def aiNextMove(gameState, mill):
 
 
 def aiPlay(gameState, mill):
+	"""Perform the AI's next move and update the game state.
+
+    :param gameState: The current game state.
+    :param mill: Indicates if the AI is making a mill.
+    """
 	move = aiNextMove(gameState, mill)
 	old_state_table = deepcopy(gameState.board)
 	if mill:
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		pp.print_table(gameState.board)
-		print(Back.RED+"The AI just made the MILL and dc. removed your piece from {}. field.".format(move[0]))
+		# pp.print_table(gameState.board)
+		print(Back.RED+"The AI just made the MILL and removed your piece from field {}.".format(move[0]))
 		globalVar.whiteRemoved += 1
 	elif globalVar.PHASE == 'INIT':
 		globalVar.TABLE[move[0]] = globalVar.variable1
-		pp.print_table(gameState.board)
+		# pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has placed piece at {}. field.".format(move[0]))
 	elif globalVar.PHASE == 'MOVE' or globalVar.PHASE == 'FLY':
 		globalVar.TABLE[move[1]] = globalVar.variable1
 		globalVar.TABLE[move[0]] = globalVar.emptyField[move[0]]
-		pp.print_table(gameState.board)
+		# pp.print_table(gameState.board)
 		print(Back.YELLOW+"The AI has moved piece from {}. field to {}. field.".format(move[0], move[1]))
 	gameState.board = old_state_table
 	new_state = State(globalVar.TABLE, False, move, gameState)
@@ -216,14 +260,9 @@ if __name__ == '__main__':
 		x = random.randint(1,2)
 		# y = random.randint(1,2)
 
-		# if y ==1:
-		# 	globalVar.variable1 = 'B'
-		# 	globalVar.variable2 = 'W'
-		# else:
-		# 	globalVar.variable1 = 'W'
-		# 	globalVar.variable2 = 'B'
+		
 
-		# x=1
+		
 		if x == 2:
 			inp = "y"
 			globalVar.variable1 = 'W'

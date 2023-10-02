@@ -1,7 +1,7 @@
 from copy import deepcopy
 import decisionCoeff as dc
 import globalVariables as globalVar
-import pretty_print as pp
+
 from gameState import State
 import game
 import os
@@ -10,9 +10,17 @@ from colorama import Fore, Back, Style
 
 
 def human_play_mill(gameState):
+	"""Human player's logic for the 'plalce' phase of the game.
+    
+    Args:
+        gameState: The current game state.
+
+    This function allows the human player to make moves during the 'place' phase of the game.
+    It displays the game board, handles piece removal, and updates the game state accordingly.
+    """
 	old_state_board = deepcopy(gameState.board)
 	print()
-	pp.print_table(gameState.board)
+	# pp.print_table(gameState.board)
 
 	br = 0
 	possibilities = []
@@ -45,6 +53,14 @@ def human_play_mill(gameState):
 
 
 def human_play_init(gameState):
+	"""Human player's logic for the 'Initial' phase of the game.
+    
+    Args:
+        gameState: The current game state.
+
+    This function allows the human player to make moves during the 'Initial' phase of the game.
+    It prompts the player to place their pieces on the board and handles input validation as well as exiting and restarting.
+    """
 	old_state_board = deepcopy(gameState.board)
 	possibilities = []
 	for i in range(24):
@@ -82,6 +98,14 @@ def human_play_init(gameState):
 
 
 def human_play_move(gameState):
+	"""Human player's logic for the 'Move' phase of the game.
+    
+    Args:
+        gameState: The current game state.
+
+    This function allows the human player to make moves during the 'Move' phase of the game.
+    It handles moving a piece from one location to another on the board.
+    """
 	old_state_board = deepcopy(gameState.board)
 	possibilities1 = []
 	for i in range(24):
@@ -135,6 +159,14 @@ def human_play_move(gameState):
 
 
 def human_play_fly(gameState):
+	"""Human player's logic for the 'Fly' phase of the game.
+    
+    Args:
+        gameState: The current game state.
+
+    This function allows the human player to make moves during the 'Fly' phase of the game.
+    It handles moving a piece to any free position on the board.
+    """
 	old_state_board = deepcopy(gameState.board)
 	possibilities1 = []
 	possibilities_free = []
@@ -179,6 +211,15 @@ def human_play_fly(gameState):
 
 
 def userGameMoves(gameState, mill):
+	"""Determine the appropriate move function for the human player based on the game phase.
+    
+    Args:
+        gameState: The current game state.
+        mill: A boolean indicating whether a mill has been formed.
+
+    This function determines the appropriate move function for the human player based on the current game phase.
+    It calls the corresponding function (e.g., 'human_play_mill', 'human_play_init', etc.) to handle the move.
+    """
 	if dc.numberOfPlayerPieces(gameState, globalVar.variable2) + globalVar.whiteRemoved == 9:
 		globalVar.PHASE = 'MOVE'
 	else:
