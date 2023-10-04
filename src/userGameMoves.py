@@ -72,7 +72,7 @@ def human_play_init(gameState):
 	while True:
 		print("PHASE 1")
 		# print(Fore.YELLOW+"ALL POSITIONS" , dc.getAllEmptyPositionsOnBoard)
-		print("To exit type 'exit' / to restart type 'restart'")
+		print("To exit type 'exit' / to restart type 'restart' / to see the rules type 'rules'")
 		print(Back.BLUE +"1 Type where do you wish to place a piece")
 		print(Back.BLACK)
 		place = input()
@@ -81,6 +81,8 @@ def human_play_init(gameState):
 			sys.exit()
 		elif(place == 'restart'):
 			os.system('python3 "/home/aravind/Desktop/MSCSY2P1/nine-mens-morris-python-game/src/game.py"')
+		elif(place == 'rules'):
+			print(globalVar.rules)
 	
 		
 		try:
@@ -116,8 +118,17 @@ def human_play_move(gameState):
 	while True:
 		print("PHASE 2")
 		print(Back.CYAN + Fore.BLACK + "Your pieces" , possibilities1)
+		print("To exit type 'exit' / to restart type 'restart' / to see the rules type 'rules'")
 
 		first = input("Type the pieces you wish to move from >> ")
+		if(first == 'exit'):
+			print("Game exited")
+			sys.exit()
+		elif(first == 'restart'):
+			os.system('python3 "/home/aravind/Desktop/MSCSY2P1/nine-mens-morris-python-game/src/game.py"')
+		elif(first == 'rules'):
+			print(globalVar.rules)
+		
 		try:
 			first = int(first)
 		except:
@@ -180,8 +191,17 @@ def human_play_fly(gameState):
 	while True:
 		print("PHASE 3")
 		print(Back.CYAN + Fore.BLACK + "Your pieces" , possibilities1)
+		print("To exit type 'exit' / to restart type 'restart' / to see the rules type 'rules'")
 
 		first = input("Phase 3(FLY) : Type the field from which you want to move the piece ")
+		if(first == 'exit'):
+			print("Game exited")
+			sys.exit()
+		elif(first == 'restart'):
+			os.system('python3 "/home/aravind/Desktop/MSCSY2P1/nine-mens-morris-python-game/src/game.py"')
+		elif(first == 'rules'):
+			print(globalVar.rules)
+		
 		try:
 			first = int(first)
 		except:
