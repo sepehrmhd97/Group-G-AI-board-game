@@ -80,7 +80,7 @@ def human_play_init(gameState):
 			print("Game exited")
 			sys.exit()
 		elif(place == 'restart'):
-			os.system('python3 "/home/aravind/Desktop/MSCSY2P1/nine-mens-morris-python-game/src/game.py"')
+			os.system('python3 "<please enter user system path >/src/game.py"')
 		elif(place == 'rules'):
 			print(globalVar.rules)
 	
