@@ -1,4 +1,4 @@
-# Group G Ai based board game.
+# Group G Ai board game.
 
 Your system requires Python with Pip to run the game.<br />
 Please type the following command to install colorama dependecies.<br />
